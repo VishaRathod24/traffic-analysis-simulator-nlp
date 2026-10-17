@@ -1,0 +1,126 @@
+{% extends "base.html" %} {% block title %}Generate Sample - Traffic Analysis
+Simulator{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            <i class="fas fa-magic me-2"></i>Generate Sample Data
+          </h4>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-4">
+            Generate realistic sample traffic data to test the analysis
+            functionality. This is perfect for demos and testing.
+          </p>
+
+          <form method="POST">
+            <div class="mb-4">
+              <label for="num_records" class="form-label fw-bold">
+                Number of Records
+              </label>
+              <input
+                type="range"
+                class="form-range"
+                id="num_records"
+                name="num_records"
+                min="100"
+                max="2000"
+                step="100"
+                value="500"
+                oninput="updateRecordCount(this.value)"
+              />
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">100</span>
+                <span class="fw-bold text-primary" id="recordCount">500</span>
+                <span class="text-muted">2000</span>
+              </div>
+              <div class="form-text">
+                More records = more accurate analysis but slower processing
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="fw-bold">Sample Data Includes:</h6>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Traffic reports with realistic text
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Timestamps distributed over 30 days
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Peak hour indicators (7-9 AM, 4-7 PM)
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Severity levels (high, medium, low)
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Multiple data sources
+                </li>
+              </ul>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-play me-2"></i>Generate & Analyze
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5><i class="fas fa-chart-bar me-2"></i>Quick Demo Stats</h5>
+          <div class="row text-center mt-3">
+            <div class="col-4">
+              <div class="stat-box">
+                <i class="fas fa-file-alt fa-2x text-primary"></i>
+                <div class="fw-bold mt-2">Text Data</div>
+                <small class="text-muted">Traffic Reports</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <i class="fas fa-clock fa-2x text-warning"></i>
+                <div class="fw-bold mt-2">Time Series</div>
+                <small class="text-muted">30 Days</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-box">
+                <i class="fas fa-tags fa-2x text-info"></i>
+                <div class="fw-bold mt-2">Categories</div>
+                <small class="text-muted">8 Types</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stat-box {
+    padding: 15px;
+    border-radius: 10px;
+    background: #f8f9fa;
+  }
+</style>
+
+{% block extra_js %}
+<script>
+  function updateRecordCount(value) {
+    document.getElementById("recordCount").textContent = value;
+  }
+</script>
+{% endblock %} {% endblock %}

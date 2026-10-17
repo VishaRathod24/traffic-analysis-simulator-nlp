@@ -1,0 +1,220 @@
+{% extends "base.html" %} {% block title %}Upload Data - Traffic Analysis
+Simulator{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            <i class="fas fa-upload me-2"></i>Upload Traffic Data
+          </h4>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-4">
+            Upload your traffic data file (CSV, JSON, or Excel) to analyze
+            congestion patterns and trends.
+          </p>
+
+          <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="needs-validation"
+            novalidate
+          >
+            <div class="mb-4">
+              <label for="file" class="form-label fw-bold">Select File</label>
+              <div class="drop-zone" id="dropZone">
+                <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                <h5>Drag and drop your file here</h5>
+                <p class="text-muted">or</p>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="file"
+                  name="file"
+                  accept=".csv,.json,.xlsx"
+                  required
+                />
+                <div class="form-text">
+                  Supported formats: CSV, JSON, Excel (.xlsx)
+                </div>
+              </div>
+              <div class="invalid-feedback">
+                Please select a file to upload.
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">Expected Data Format</label>
+              <div class="alert alert-info">
+                <h6>
+                  <i class="fas fa-info-circle me-2"></i>Data Format
+                  Requirements
+                </h6>
+                <p class="mb-2">
+                  Your data should contain at least the following columns:
+                </p>
+                <ul class="mb-0">
+                  <li>
+                    <code>text</code> - The traffic-related text content
+                    (required)
+                  </li>
+                  <li>
+                    <code>timestamp</code> - Date/time of the report (optional
+                    but recommended)
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="fw-bold">Sample Data Format</h6>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>text</th>
+                      <th>timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Heavy traffic on Highway 101 due to accident</td>
+                      <td>2024-01-15 08:30:00</td>
+                    </tr>
+                    <tr>
+                      <td>Moderate congestion on Main Street</td>
+                      <td>2024-01-15 09:15:00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-search me-2"></i>Analyze Data
+              </button>
+              <a
+                href="{{ url_for('generate') }}"
+                class="btn btn-outline-secondary"
+              >
+                <i class="fas fa-magic me-2"></i>Don't have data? Try with
+                sample
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Data Sources Info -->
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5><i class="fas fa-database me-2"></i>Recommended Data Sources</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              <a
+                href="https://www.kaggle.com/datasets/tharunreddy/traffic-tweets"
+                target="_blank"
+                class="text-decoration-none"
+              >
+                Traffic Tweets Dataset (Kaggle)
+              </a>
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check-circle text-success me-2"></i>
+              <a
+                href="https://data.gov.in"
+                target="_blank"
+                class="text-decoration-none"
+              >
+                Government Open Data (data.gov.in)
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .drop-zone {
+    border: 2px dashed #3498db;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    background: #f8f9fa;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .drop-zone:hover {
+    border-color: #2c3e50;
+    background: #e9ecef;
+  }
+
+  .drop-zone.dragover {
+    border-color: #27ae60;
+    background: #d4edda;
+  }
+</style>
+
+{% block extra_js %}
+<script>
+  // File input styling
+  const fileInput = document.getElementById("file");
+  const dropZone = document.getElementById("dropZone");
+
+  fileInput.addEventListener("change", function () {
+    if (this.files.length > 0) {
+      dropZone.querySelector("h5").textContent =
+        "File selected: " + this.files[0].name;
+      dropZone.querySelector("h5").classList.add("text-success");
+    }
+  });
+
+  // Drag and drop
+  dropZone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    this.classList.add("dragover");
+  });
+
+  dropZone.addEventListener("dragleave", function () {
+    this.classList.remove("dragover");
+  });
+
+  dropZone.addEventListener("drop", function (e) {
+    e.preventDefault();
+    this.classList.remove("dragover");
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      fileInput.files = files;
+      dropZone.querySelector("h5").textContent =
+        "File selected: " + files[0].name;
+      dropZone.querySelector("h5").classList.add("text-success");
+    }
+  });
+
+  // Form validation
+  (function () {
+    "use strict";
+    const forms = document.querySelectorAll(".needs-validation");
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false,
+      );
+    });
+  })();
+</script>
+{% endblock %} {% endblock %}

@@ -1,0 +1,190 @@
+{% extends "base.html" %} {% block title %}Home - Traffic Analysis Simulator{%
+endblock %} {% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">
+          <i class="fas fa-chart-line me-3"></i>Intelligent Traffic Analysis
+        </h1>
+        <p class="lead mb-4">
+          Analyze traffic-related textual data to identify congestion patterns
+          and trends using advanced NLP and statistical analysis.
+        </p>
+        <div class="d-flex gap-3">
+          <a href="{{ url_for('upload') }}" class="btn btn-success btn-lg">
+            <i class="fas fa-upload me-2"></i>Upload Data
+          </a>
+          <a
+            href="{{ url_for('generate') }}"
+            class="btn btn-outline-light btn-lg"
+          >
+            <i class="fas fa-magic me-2"></i>Try Demo
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <i class="fas fa-road" style="font-size: 150px; opacity: 0.3"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">
+      <i class="fas fa-cogs me-2"></i>Powerful Features
+    </h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-broom feature-icon"></i>
+            <h4 class="card-title">Text Preprocessing</h4>
+            <p class="card-text text-muted">
+              Advanced text cleaning, tokenization, and normalization for
+              optimal analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-key feature-icon"></i>
+            <h4 class="card-title">Keyword Extraction</h4>
+            <p class="card-text text-muted">
+              Extract traffic-related keywords, bigrams, and trigrams using NLP
+              techniques.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-search feature-icon"></i>
+            <h4 class="card-title">Pattern Detection</h4>
+            <p class="card-text text-muted">
+              Identify congestion patterns, severity levels, and temporal
+              trends.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-pie feature-icon"></i>
+            <h4 class="card-title">Data Visualization</h4>
+            <p class="card-text text-muted">
+              Generate beautiful charts, graphs, and interactive dashboards.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-file-alt feature-icon"></i>
+            <h4 class="card-title">Comprehensive Reports</h4>
+            <p class="card-text text-muted">
+              Generate detailed analysis reports with actionable insights.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-cloud-upload-alt feature-icon"></i>
+            <h4 class="card-title">Multiple Data Sources</h4>
+            <p class="card-text text-muted">
+              Support for CSV, JSON, and Excel files from various sources.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">
+      <i class="fas fa-question-circle me-2"></i>How It Works
+    </h2>
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <div class="timeline">
+          <div class="row g-4">
+            <div class="col-md-3 text-center">
+              <div class="step-circle mx-auto mb-3">1</div>
+              <h5>Upload Data</h5>
+              <p class="text-muted small">
+                Upload traffic tweets or reports (CSV, JSON, Excel)
+              </p>
+            </div>
+            <div class="col-md-3 text-center">
+              <div class="step-circle mx-auto mb-3">2</div>
+              <h5>Preprocess</h5>
+              <p class="text-muted small">
+                Clean and normalize text data automatically
+              </p>
+            </div>
+            <div class="col-md-3 text-center">
+              <div class="step-circle mx-auto mb-3">3</div>
+              <h5>Analyze</h5>
+              <p class="text-muted small">
+                Extract keywords and detect patterns
+              </p>
+            </div>
+            <div class="col-md-3 text-center">
+              <div class="step-circle mx-auto mb-3">4</div>
+              <h5>Visualize</h5>
+              <p class="text-muted small">View charts, graphs, and insights</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .step-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+</style>
+
+<!-- CTA Section -->
+<section class="py-5">
+  <div class="container text-center">
+    <h2 class="mb-4">Ready to Analyze Your Traffic Data?</h2>
+    <p class="lead text-muted mb-4">
+      Upload your traffic data or try our demo with sample data to see the
+      analysis in action.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-upload me-2"></i>Upload Now
+      </a>
+      <a href="{{ url_for('generate') }}" class="btn btn-success btn-lg">
+        <i class="fas fa-play me-2"></i>Run Demo
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

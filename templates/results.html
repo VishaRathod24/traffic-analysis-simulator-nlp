@@ -1,0 +1,223 @@
+{% extends "base.html" %} {% block title %}Analysis Results - Traffic Analysis
+Simulator{% endblock %} {% block content %}
+<div class="container py-5">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-3">
+        <i class="fas fa-chart-bar me-2"></i>Analysis Results
+      </h2>
+      <p class="text-muted">Comprehensive analysis of traffic data</p>
+    </div>
+  </div>
+
+  <!-- Statistics Overview -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="stat-card">
+        <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
+        <div class="stat-value">{{ total_records }}</div>
+        <div class="stat-label">Total Records</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card">
+        <i class="fas fa-key fa-2x text-success mb-2"></i>
+        <div class="stat-value">{{ keyword_freq|length }}</div>
+        <div class="stat-label">Unique Keywords</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card">
+        <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+        <div class="stat-value">{{ severity_counts.values()|sum }}</div>
+        <div class="stat-label">Severity Events</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="stat-card">
+        <i class="fas fa-tags fa-2x text-info mb-2"></i>
+        <div class="stat-value">{{ categories|length }}</div>
+        <div class="stat-label">Categories</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Main Content -->
+    <div class="col-lg-8">
+      <!-- Visualizations Grid -->
+      <div class="row g-4 mb-4">
+        {% if viz_files %} {% for viz in viz_files %} {% if viz.name.endswith('.png') %}
+        <div class="col-md-6">
+          <div class="viz-card">
+            <h6 class="mb-3">
+              {{ viz.name|replace('.png', '')|replace('_', ' ')|title }}
+            </h6>
+            <img
+              src="{{ viz.url }}"
+              alt="{{ viz.name }}"
+              class="img-fluid rounded"
+            />
+          </div>
+        </div>
+        {% endif %} {% endfor %} {% else %}
+        <div class="col-12">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            No visualizations generated yet. Please run an analysis first.
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Data Preview -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-table me-2"></i>Data Preview</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" style="max-height: 400px">
+            <table class="table table-sm table-hover">
+              <thead class="table-light sticky-top">
+                <tr>
+                  <th>ID</th>
+                  <th>Timestamp</th>
+                  <th>Text</th>
+                  <th>Severity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in df.head(20).itertuples() %}
+                <tr>
+                  <td>{{ row.id }}</td>
+                  <td>{{ row.timestamp }}</td>
+                  <td>
+                    {{ row.text[:50] }}{% if row.text|length > 50 %}...{% endif
+                    %}
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-{% if row.severity == 'high' %}danger{% elif row.severity == 'medium' %}warning{% else %}success{% endif %}"
+                    >
+                      {{ row.severity }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+      <!-- Top Keywords -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-key me-2"></i>Top Keywords</h5>
+        </div>
+        <div class="card-body">
+          {% if keyword_freq %}
+          <div class="d-flex flex-wrap gap-2">
+            {% for word, count in keyword_freq[:15] %}
+            <span class="keyword-tag">
+              {{ word }}
+              <span class="badge bg-light text-dark">{{ count }}</span>
+            </span>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-muted">No keywords found</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Severity Distribution -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-chart-pie me-2"></i>Severity Distribution
+          </h5>
+        </div>
+        <div class="card-body">
+          {% if severity_counts %}
+          <div class="list-group">
+            {% for severity, count in severity_counts.items() %}
+            <div
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span class="severity-{{ severity }}">
+                <i class="fas fa-circle me-2"></i>{{ severity|title }}
+              </span>
+              <span
+                class="badge bg-{% if severity == 'high' %}danger{% elif severity == 'medium' %}warning{% else %}success{% endif %} rounded-pill"
+              >
+                {{ count }}
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-muted">No severity data</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Categories</h5>
+        </div>
+        <div class="card-body">
+          {% if categories %}
+          <div class="list-group">
+            {% for category, count in categories.items()|sort(attribute='1',
+            reverse=True) %}
+            <div
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ category|replace('_', ' ')|title }}</span>
+              <span class="badge bg-primary rounded-pill">{{ count }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-muted">No categories found</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Download Options -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-download me-2"></i>Export Options
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <a
+              href="{{ url_for('download_report') }}"
+              class="btn btn-outline-primary"
+            >
+              <i class="fas fa-file-alt me-2"></i>Download Report
+            </a>
+            <a
+              href="{{ url_for('download_data') }}"
+              class="btn btn-outline-success"
+            >
+              <i class="fas fa-database me-2"></i>Download Processed Data
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-info">
+              <i class="fas fa-tachometer-alt me-2"></i>Interactive Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

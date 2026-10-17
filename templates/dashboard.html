@@ -1,0 +1,203 @@
+{% extends "base.html" %} {% block title %}Dashboard - Traffic Analysis
+Simulator{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-3">
+        <i class="fas fa-tachometer-alt me-2"></i>Interactive Dashboard
+      </h2>
+      <p class="text-muted">Visual overview of traffic analysis results</p>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title">Total Records</h6>
+              <h2 class="mb-0">{{ total_records }}</h2>
+            </div>
+            <i class="fas fa-file-alt fa-3x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title">Keywords Found</h6>
+              <h2 class="mb-0">{{ keyword_freq|length }}</h2>
+            </div>
+            <i class="fas fa-key fa-3x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title">Categories</h6>
+              <h2 class="mb-0">{{ categories|length }}</h2>
+            </div>
+            <i class="fas fa-tags fa-3x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="card-title">Peak Hours</h6>
+              <h2 class="mb-0">
+                {{ congestion_patterns.get('peak_hours', [])|length if
+                congestion_patterns.get('peak_hours') else 0 }}
+              </h2>
+            </div>
+            <i class="fas fa-clock fa-3x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Visualizations -->
+    <div class="col-lg-8">
+      {% if viz_files %} {% for viz in viz_files %} {% if
+      viz.name.endswith('.html') %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            {{ viz.name|replace('.html', '')|replace('_', ' ')|title }}
+          </h5>
+        </div>
+        <div class="card-body p-0">
+          <iframe
+            src="{{ viz.url }}"
+            style="width: 100%; height: 500px; border: none"
+          ></iframe>
+        </div>
+      </div>
+      {% endif %} {% endfor %} {% endif %}
+
+      <!-- Static Charts -->
+      <div class="row g-4">
+        {% if viz_files %} {% for viz in viz_files %} {% if
+        viz.name.endswith('.png') %}
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">
+                {{ viz.name|replace('.png', '')|replace('_', ' ')|title }}
+              </h6>
+            </div>
+            <div class="card-body p-2">
+              <img
+                src="{{ viz.url }}"
+                alt="{{ viz.name }}"
+                class="img-fluid rounded"
+              />
+            </div>
+          </div>
+        </div>
+        {% endif %} {% endfor %} {% endif %}
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+      <!-- Quick Stats -->
+      <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Insights</h5>
+        </div>
+        <div class="card-body">
+          {% if trends.get('direction') %}
+          <div class="mb-3">
+            <h6 class="text-muted">Traffic Trend</h6>
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-{% if trends.get('direction') == 'increasing' %}arrow-up text-danger{% else %}arrow-down text-success{% endif %} fa-2x me-2"
+              ></i>
+              <div>
+                <strong>{{ trends.get('direction')|title }}</strong>
+                <small class="text-muted"
+                  >({{ "%.1f"|format(trends.get('change_percentage', 0)) }}%
+                  change)</small
+                >
+              </div>
+            </div>
+          </div>
+          {% endif %} {% if congestion_patterns.get('peak_hours') %}
+          <div class="mb-3">
+            <h6 class="text-muted">Peak Hours</h6>
+            <div>
+              {% for hour in congestion_patterns.get('peak_hours', [])[:5] %}
+              <span class="badge bg-primary me-1">{{ hour }}:00</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Severity Breakdown -->
+      <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-exclamation-triangle me-2"></i>Severity Alert
+          </h5>
+        </div>
+        <div class="card-body">
+          {% if severity_counts %} {% for severity, count in
+          severity_counts.items() %}
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="severity-{{ severity }}">
+              <i class="fas fa-circle me-1"></i>{{ severity|title }}
+            </span>
+            <div class="progress" style="width: 60%; height: 20px">
+              <div
+                class="progress-bar bg-{% if severity == 'high' %}danger{% elif severity == 'medium' %}warning{% else %}success{% endif %}"
+                role="progressbar"
+                style="width: {{ (count / total_records * 100)|int }}%"
+              >
+                {{ (count / total_records * 100)|int }}%
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+      </div>
+
+      <!-- Top Keywords Cloud -->
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0"><i class="fas fa-cloud me-2"></i>Keyword Cloud</h5>
+        </div>
+        <div class="card-body text-center">
+          {% if keyword_freq %} {% set colors = ['primary', 'secondary',
+          'success', 'danger', 'warning', 'info', 'dark'] %} {% set max_count =
+          keyword_freq[0][1] if keyword_freq else 1 %}{% for word, count in
+          keyword_freq[:20] %}
+          <span
+            class="badge bg-{{ colors[loop.index0 % 7] }}"
+            style="font-size: {{ (0.7 + (count / max_count * 0.8)) }}rem; margin: 2px;"
+          >
+            {{ word }}
+          </span>
+          {% endfor %} {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
