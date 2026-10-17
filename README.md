@@ -69,7 +69,7 @@ An intelligent, full-stack Natural Language Processing (NLP) and statistical ana
 
 ---
 
-## 🚀 Getting Started Locally
+## Getting Started Locally
 
 ### Prerequisites
 - Python 3.9, 3.10, 3.11, or 3.12
@@ -120,49 +120,7 @@ The repository includes a comprehensive 30-scenario test suite verifying navigat
 
 ```bash
 python test_suite.py
+
 ```
 
-Expected output:
-```
-======================================================================
-  QA TEST EXECUTION REPORT - TRAFFIC ANALYSIS NLP PLATFORM
-======================================================================
-[PASS] [Smoke] GET /
-[PASS] [Smoke] GET /about
-[PASS] [Smoke] GET /upload
-[PASS] [Smoke] GET /generate
-[PASS] [Boundary/Stress] Generate: Boundary & Stress tests
-[PASS] [Security/Validation] Upload: Disallowed extensions & empty files blocked
-[PASS] [Compatibility] Process CSV, XLSX, Unstructured, & Aggregated Regional Data
-[PASS] [Security] Path Traversal containment verified
-[PASS] [Integrity] Report & Processed CSV Downloads verified
-[PASS] [Visualization] Generated 7 PNG charts & interactive Plotly dashboard
-[PASS] [UI/UX] GET /dashboard renders complete UI
-======================================================================
-  TEST SUMMARY: 30/30 Passed (100.0%)
-======================================================================
-```
 
----
-
-## ☁️ Deployment
-
-### Option 1: Render / Railway / Heroku (PaaS)
-1. Push your repository to GitHub.
-2. Link your repo in **[Render.com](https://render.com)** as a **Web Service**.
-3. Render detects `requirements.txt` and `Procfile`:
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app --workers=2 --threads=4 --timeout=120`
-
-### Option 2: Docker Container
-Build and run the container locally or on any cloud server:
-```bash
-docker build -t traffic-nlp-analyzer .
-docker run -p 5000:5000 traffic-nlp-analyzer
-```
-Navigate to `http://localhost:5000`.
-
----
-
-## 📄 License
-This project is licensed under the MIT License.
