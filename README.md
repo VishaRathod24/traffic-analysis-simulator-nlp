@@ -42,33 +42,6 @@ An intelligent, full-stack Natural Language Processing (NLP) and statistical ana
 
 ---
 
-## 📂 Project Structure
-
-```
-├── app.py                         # Flask web application & API routes
-├── traffic_analysis_simulator.py  # Core NLP, pattern detector & visualization engine
-├── test_suite.py                  # Automated QA test suite (30 scenarios, 100% pass)
-├── requirements.txt               # Python package dependencies
-├── start_project.bat              # Windows one-click startup batch script
-├── Procfile                       # PaaS production process runner (Gunicorn)
-├── Dockerfile                     # Containerized production build
-├── .gitignore                     # Git tracking exclusions
-├── templates/                     # Jinja2 HTML templates
-│   ├── base.html                  # Main layout with glassmorphic UI & spinner
-│   ├── index.html                 # Homepage with overview & quick actions
-│   ├── upload.html                # Custom dataset upload portal
-│   ├── generate.html              # Synthetic traffic data generator
-│   ├── results.html               # Analysis results & static chart gallery
-│   ├── dashboard.html             # Interactive Plotly dashboard view
-│   ├── about.html                 # Architecture & technology details
-│   └── error.html                 # Custom 404/500/413 error templates
-├── uploads/                       # Temporary storage for uploaded datasets (.gitkeep)
-├── output/                        # Processed CSV exports (.gitkeep)
-└── visualizations/                # Generated PNG charts & interactive HTML (.gitkeep)
-```
-
----
-
 ## Getting Started Locally
 
 ### Prerequisites
@@ -77,7 +50,7 @@ An intelligent, full-stack Natural Language Processing (NLP) and statistical ana
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/nlp-traffic-analysis.git
+git clone https://github.com/VishaRathod24/nlp-traffic-analysis.git
 cd nlp-traffic-analysis
 ```
 
